@@ -6,6 +6,7 @@ run
 ```
 php create_schema.php -uusername -ppassword -s127.0.0.1 -ddatabase
 ```
+A file will be created called db.md.
 
 ### options
 * -u username
