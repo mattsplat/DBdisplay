@@ -9,32 +9,44 @@ $servername = $config['s'];
 $username = $config['u'];
 $password = $config['p'];
 $database = $config['d'] ?? '';
+$charset = 'utf8mb4';
+$driver = 'mysql';
 
 // Create connection
-$conn = new mysqli($servername, $username, $password);
+$dsn = "$driver:host=$servername;dbname=$database;charset=$charset";
+$opt = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
+$pdo = new PDO($dsn, $username, $password, $opt);
+//$conn = new mysqli($servername, $username, $password);
 
 // Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (!$pdo) {
+    die("Connection failed: ");
 }
 echo "Connected successfully".PHP_EOL;
 
 $sql = 'select * from information_schema.columns';
-$sql .= $database? " where columns.table_schema = '$database';":  ';';
+$sql .= $database? " where columns.table_schema = :database;":  ';';
 echo $sql.PHP_EOL;
-$result = $conn->query($sql);
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['database' => $database]);
+$result = $stmt->fetchAll();
+
 
 $tables =[];
-if($result->num_rows > 0){
+if($result){
 
-    while($row = $result->fetch_assoc() ){
+    foreach($result as $row ){
         $tables[] = $row;
     }
 }else{
     echo '0 results found'.PHP_EOL;
 }
 
-$conn->close();
+
 
 $file = fopen('db.md', 'w');
 $count = count($tables);
