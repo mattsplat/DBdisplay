@@ -14,3 +14,5 @@ A file will be created called db.md.
 * -s ip address
 * -d database name 
 * --driver="pgsql" -- default is mysql
+
+Requires pdo-pgsql for postgres
