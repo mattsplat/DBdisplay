@@ -1,10 +1,10 @@
 # DBdisplay
-Create a markdown file of MySQL database schema  
+Create a markdown file of MySQL or Postgresql database schema  
 
 ## Usage
 run 
 ```
-php create_schema.php -uusername -ppassword -s127.0.0.1 -ddatabase
+php create_schema.php -uusername -ppassword -s127.0.0.1 -ddatabase 
 ```
 A file will be created called db.md.
 
@@ -12,4 +12,5 @@ A file will be created called db.md.
 * -u username
 * -p password
 * -s ip address
-* -d database name -- optional
+* -d database name 
+* --driver="pgsql" -- default is mysql
